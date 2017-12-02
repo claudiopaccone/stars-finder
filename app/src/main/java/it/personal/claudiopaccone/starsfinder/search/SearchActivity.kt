@@ -52,6 +52,7 @@ class SearchActivity :
         when (resultState) {
             is ErrorState -> {
                 stargazersRecyclerView.visibility = View.INVISIBLE
+                nextProgressBar.visibility = View.INVISIBLE
                 errorTextView.visibility = View.VISIBLE
                 loadingProgressBar.visibility = View.INVISIBLE
                 if (resultState.isNotFound) {
@@ -62,26 +63,39 @@ class SearchActivity :
             }
             SuccessState -> {
                 stargazersRecyclerView.visibility = View.VISIBLE
+                nextProgressBar.visibility = View.INVISIBLE
                 errorTextView.visibility = View.INVISIBLE
                 loadingProgressBar.visibility = View.INVISIBLE
             }
-            LoadingState -> {
+            FirstLoadState -> {
                 closeKeyboard()
                 stargazersRecyclerView.visibility = View.INVISIBLE
+                nextProgressBar.visibility = View.INVISIBLE
                 errorTextView.visibility = View.INVISIBLE
                 loadingProgressBar.visibility = View.VISIBLE
+            }
+            LoadMoreState -> {
+                stargazersRecyclerView.visibility = View.VISIBLE
+                nextProgressBar.visibility = View.VISIBLE
+                errorTextView.visibility = View.INVISIBLE
+                loadingProgressBar.visibility = View.INVISIBLE
             }
         }
     }
 
     private fun renderList(list: List<Stargazer>) {
-        if (list.isEmpty()) listAdapter.deleteAllItems()
-        else
+        if (list.isEmpty()) {
+            listAdapter.deleteAllItems()
+            nextProgressBar.visibility = View.INVISIBLE
+        } else {
             listAdapter.addItems(list)
+        }
+
+
     }
 
     private fun renderSearchButton(viewState: SearchViewState) {
-        if (viewState.owner?.isNotEmpty() == true && viewState.repository?.isNotEmpty() == true) {
+        if (viewState.owner.isNotEmpty() == true && viewState.repository.isNotEmpty() == true) {
             searchButton.setEnabled(true)
         } else {
             searchButton.setEnabled(false)

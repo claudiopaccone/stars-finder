@@ -5,12 +5,6 @@ import android.content.Context
 import android.view.inputmethod.InputMethodManager
 import retrofit2.Response
 
-
-sealed class HttpResponse
-object Successfull : HttpResponse()
-object NotFound : HttpResponse()
-object GenericError : HttpResponse()
-
 class NotFoundException : Exception()
 
 fun String.getNextUrl() =
@@ -19,7 +13,7 @@ fun String.getNextUrl() =
 
 fun <T> Response<T>.handleErrorResponseCode() = when {
     code() == 404 -> throw NotFoundException()
-    code() in (200..299) -> Successfull
+    code() in (200..299) -> this
     else -> throw Exception()
 }
 

@@ -4,4 +4,5 @@
     <string name="repository_hint">Repository</string>
     <string name="notFoundErrorMessage">Ooops, non ho trovato la repository!</string>
     <string name="genericErrorMessage">Ooops, non ho trovato la repository!</string>
+    <string name="searchButton">Search</string>
 </resources>

@@ -18,7 +18,8 @@ data class SearchViewState(
 sealed class ResultState
 object SuccessState : ResultState()
 data class ErrorState(val isNotFound: Boolean) : ResultState()
-object LoadingState : ResultState()
+object FirstLoadState : ResultState()
+object LoadMoreState : ResultState()
 object NoneState : ResultState()
 
 sealed class SearchAction : Action
@@ -27,6 +28,7 @@ data class OwnerChanged(val owner: String) : SearchAction()
 data class RepositoryChanged(val repository: String) : SearchAction()
 data class SearchResult(val list: List<Stargazer>, val urlNext: String? = null) : SearchAction()
 object StartSearch : SearchAction()
+object LoadMore : SearchAction()
 data class SearchError(val isNotFound: Boolean) : SearchAction()
 object SearchCompleted : SearchAction()
 
@@ -35,9 +37,10 @@ val searchReducer: Reducer<SearchAction, SearchViewState> = { action, viewState 
         is OwnerChanged -> viewState.copy(owner = action.owner)
         is RepositoryChanged -> viewState.copy(repository = action.repository)
         is SearchResult -> viewState.copy(resultState = SuccessState, list = action.list, next = action.urlNext)
-        StartSearch -> viewState.copy(resultState = LoadingState, next = null, list = emptyList())
+        StartSearch -> viewState.copy(resultState = FirstLoadState, next = null, list = emptyList())
         is SearchError -> viewState.copy(resultState = ErrorState(isNotFound = action.isNotFound))
         SearchCompleted -> viewState.copy(next = null)
+        LoadMore -> viewState.copy(resultState = LoadMoreState)
     }
 }
 
