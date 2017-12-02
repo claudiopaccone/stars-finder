@@ -14,19 +14,14 @@ class SearchPresenter(
         private val jobScheduler: Scheduler = Schedulers.io()
 ) : MVIPresenter<SearchView, SearchViewState>() {
 
-    override var currentState = SearchViewState(
-            resultState = NoneState,
-            owner = "",
-            repository = "",
-            list = emptyList(),
-            next = null)
+    override var currentState = SearchViewState(resultState = NoneState, owner = "", repository = "", list = emptyList(), next = null)
 
     override fun bind(view: SearchView) {
 
         val searchIntent: Observable<SearchAction> = view
                 .startSearch()
                 .flatMap {
-                    SearchUseCases.startSearch(apiService, currentState.owner!!, currentState.repository!!, jobScheduler)
+                    SearchUseCases.startSearch(apiService, currentState.owner, currentState.repository, jobScheduler)
                 }
 
         val loadNextPageIntent: Observable<SearchAction> = view

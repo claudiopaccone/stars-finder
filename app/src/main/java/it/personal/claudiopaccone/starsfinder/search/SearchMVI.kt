@@ -10,8 +10,8 @@ import it.personal.claudiopaccone.starsfinder.mvi.ViewState
 
 data class SearchViewState(
         val resultState: ResultState,
-        val owner: String?,
-        val repository: String?,
+        val owner: String,
+        val repository: String,
         val next: String?,
         val list: List<Stargazer>) : ViewState
 
@@ -23,8 +23,8 @@ object NoneState : ResultState()
 
 sealed class SearchAction : Action
 
-data class OwnerChanged(val owner: String?) : SearchAction()
-data class RepositoryChanged(val repository: String?) : SearchAction()
+data class OwnerChanged(val owner: String) : SearchAction()
+data class RepositoryChanged(val repository: String) : SearchAction()
 data class SearchResult(val list: List<Stargazer>, val urlNext: String? = null) : SearchAction()
 object StartSearch : SearchAction()
 data class SearchError(val isNotFound: Boolean) : SearchAction()
