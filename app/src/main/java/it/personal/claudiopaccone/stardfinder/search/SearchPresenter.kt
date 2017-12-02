@@ -10,7 +10,7 @@ class SearchPresenter(
         private val viewScheduler: Scheduler = AndroidSchedulers.mainThread()
 ) : MVIPresenter<SearchView, SearchViewState>() {
 
-    override var currentState = SearchViewState(text = "First", progressVisibility = false)
+    override var currentState = SearchViewState(owner = null, repository = null, searchingInProgress = false)
 
     override fun bind(view: SearchView) {
 
@@ -20,13 +20,19 @@ class SearchPresenter(
                     SearchUseCases.startSearch()
                 }
 
-        val clearIntent: Observable<SearchAction> = view
-                .clearSearch()
+        val ownerChangedIntent: Observable<SearchAction> = view
+                .ownerChanged()
                 .flatMap {
-                    SearchUseCases.clearSearch()
+                    Observable.just(OwnerChanged(it.toString()))
                 }
 
-        Observable.merge(searchIntent, clearIntent)
+        val repositoryChangedIntent: Observable<SearchAction> = view
+                .repositoryChanged()
+                .flatMap {
+                    Observable.just(RepositoryChanged(it.toString()))
+                }
+
+        Observable.merge(searchIntent, ownerChangedIntent, repositoryChangedIntent)
                 .observeOn(viewScheduler)
                 .subscribe {
                     val newState = it.reduceViewState(currentState, searchReducer)

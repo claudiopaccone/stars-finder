@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">StarsFinder</string>
+    <string name="owner_hint">Owner</string>
+    <string name="repository_hint">Repository</string>
 </resources>

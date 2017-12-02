@@ -7,7 +7,4 @@ object SearchUseCases {
     fun startSearch() =
             Observable.just(Search)
 
-    fun clearSearch() =
-            Observable.just(Clear)
-
 }
