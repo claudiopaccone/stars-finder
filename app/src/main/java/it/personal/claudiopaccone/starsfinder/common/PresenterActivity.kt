@@ -1,11 +1,11 @@
-package it.personal.claudiopaccone.stardfinder.common
+package it.personal.claudiopaccone.starsfinder.common
 
 import android.os.Bundle
 import android.support.v4.app.LoaderManager
 import android.support.v4.content.Loader
 import android.support.v7.app.AppCompatActivity
-import it.personal.claudiopaccone.stardfinder.mvi.Presenter
-import it.personal.claudiopaccone.stardfinder.mvi.View
+import it.personal.claudiopaccone.starsfinder.mvi.Presenter
+import it.personal.claudiopaccone.starsfinder.mvi.View
 
 abstract class PresenterActivity<P : Presenter<V>, V : View> : AppCompatActivity() {
 

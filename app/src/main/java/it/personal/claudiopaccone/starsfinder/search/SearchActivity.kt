@@ -1,11 +1,13 @@
-package it.personal.claudiopaccone.stardfinder.search
+package it.personal.claudiopaccone.starsfinder.search
 
 import android.os.Bundle
 import android.view.View
 import com.jakewharton.rxbinding2.view.RxView
 import com.jakewharton.rxbinding2.widget.RxTextView
 import io.reactivex.Observable
-import it.personal.claudiopaccone.stardfinder.common.PresenterActivity
+import io.reactivex.subjects.PublishSubject
+import it.personal.claudiopaccone.starsfinder.api.ApiManager
+import it.personal.claudiopaccone.starsfinder.common.PresenterActivity
 import it.personal.claudiopaccone.starsfinder.R
 import kotlinx.android.synthetic.main.activity_search.*
 
@@ -13,7 +15,9 @@ class SearchActivity :
         PresenterActivity<SearchPresenter, SearchView>(),
         SearchView {
 
-    override val presenterGenerator: () -> SearchPresenter = { SearchPresenter() }
+    override val loadNextPageIntent: PublishSubject<String> = PublishSubject.create()
+
+    override val presenterGenerator: () -> SearchPresenter = { SearchPresenter(apiService = ApiManager().apiService) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,4 +47,7 @@ class SearchActivity :
 
     override fun startSearch(): Observable<Any> = RxView.clicks(searchButton)
 
+    override fun onNextUrl(urlNext: String) {
+        loadNextPageIntent.onNext(urlNext)
+    }
 }

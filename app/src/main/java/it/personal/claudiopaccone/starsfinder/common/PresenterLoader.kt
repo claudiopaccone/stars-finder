@@ -1,9 +1,9 @@
-package it.personal.claudiopaccone.stardfinder.common
+package it.personal.claudiopaccone.starsfinder.common
 
 import android.content.Context
 import android.support.v4.content.Loader
-import it.personal.claudiopaccone.stardfinder.mvi.Presenter
-import it.personal.claudiopaccone.stardfinder.mvi.View
+import it.personal.claudiopaccone.starsfinder.mvi.Presenter
+import it.personal.claudiopaccone.starsfinder.mvi.View
 
 class PresenterLoader<P : Presenter<V>, V : View>(
         context: Context,
