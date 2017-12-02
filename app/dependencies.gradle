@@ -3,6 +3,7 @@ ext.rxJavaVersion = '2.1.7'
 ext.rxBindingVersion = '2.0.0'
 ext.supportLibraryVersion = '26.1.0'
 ext.retrofitVersion = '2.2.0'
+ext.glideVersion = '3.7.0'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -18,7 +19,9 @@ dependencies {
     compile "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
     compile "com.jakewharton.rxbinding2:rxbinding:$rxBindingVersion"
     compile "com.jakewharton.rxbinding2:rxbinding-design:$rxBindingVersion"
+    compile "com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:$rxBindingVersion"
     compile "com.squareup.retrofit2:retrofit:$retrofitVersion"
     compile "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
     compile "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    compile "com.github.bumptech.glide:glide:$glideVersion"
 }

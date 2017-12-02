@@ -15,9 +15,9 @@ class SearchPresenter(
 ) : MVIPresenter<SearchView, SearchViewState>() {
 
     override var currentState = SearchViewState(
+            resultState = NoneState,
             owner = "",
             repository = "",
-            searchingInProgress = false,
             list = emptyList(),
             next = null)
 
@@ -30,8 +30,10 @@ class SearchPresenter(
                 }
 
         val loadNextPageIntent: Observable<SearchAction> = view
-                .loadNextPageIntent
-                .flatMap { SearchUseCases.loadNextPage(apiService, it, jobScheduler) }
+                .loadMoreStargazers()
+                .filter { it == true }
+                .filter { currentState.next.isNullOrEmpty() == false }
+                .flatMap { SearchUseCases.loadNextPage(apiService, currentState.next!!, jobScheduler) }
 
 
         val ownerChangedIntent: Observable<SearchAction> = view

@@ -4,7 +4,9 @@ import io.reactivex.Observable
 import io.reactivex.Scheduler
 import it.personal.claudiopaccone.starsfinder.api.ApiService
 import it.personal.claudiopaccone.starsfinder.api.models.Stargazer
+import it.personal.claudiopaccone.starsfinder.common.NotFoundException
 import it.personal.claudiopaccone.starsfinder.common.getNextUrl
+import it.personal.claudiopaccone.starsfinder.common.handleErrorResponseCode
 
 typealias StargazersResponseInfo = Pair<String?, List<Stargazer>>
 
@@ -14,20 +16,28 @@ object SearchUseCases {
             .getStargazers(owner, repository)
             .flatMap {
                 if (it.isError) {
-                    Observable.error(Exception("error"))
+                    Observable.error(Exception("Generic error"))
                 } else {
                     val response = it.response()
-                    val next = response.headers().get("Link").getNextUrl()
+                    response.handleErrorResponseCode()
+
+                    val next = response.headers().get("Link")?.getNextUrl()
                     Observable.just(StargazersResponseInfo(next, response.body()))
                 }
             }
             .flatMap<SearchAction> { (next, list) ->
                 if (next == null)
-                    Observable.just(SearchResult(list))
+                    Observable.just(SearchResult(list), SearchCompleted)
                 else
-                    Observable.just(SearchResult(list), SearchNextPage(next))
+                    Observable.just(SearchResult(list, next))
             }
-            .doOnError { SearchError }
+            .startWith(StartSearch)
+            .onErrorReturn {
+                if (it is NotFoundException)
+                    SearchError(isNotFound = true)
+                else
+                    SearchError(isNotFound = false)
+            }
             .subscribeOn(jobScheduler)
 
 
@@ -43,18 +53,12 @@ object SearchUseCases {
                 }
             }
             .flatMap<SearchAction> { (next, list) ->
-                Observable.create { observable ->
-                    observable.onNext(SearchResult(list))
-                    if (next != null) {
-                        observable.onNext(SearchNextPage(next))
-                    } else {
-                        observable.onNext(SearchCompleted)
-                    }
-
-                    observable.onComplete()
-                }
+                if (next == null)
+                    Observable.just(SearchResult(list), SearchCompleted)
+                else
+                    Observable.just(SearchResult(list, next))
             }
-            .doOnError { SearchError }
+            .doOnError { SearchError(isNotFound = false) }
             .subscribeOn(jobScheduler)
 
 }
