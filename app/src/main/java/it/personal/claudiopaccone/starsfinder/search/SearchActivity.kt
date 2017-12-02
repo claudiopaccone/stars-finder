@@ -111,7 +111,7 @@ class SearchActivity :
     override fun startSearch(): Observable<Any> = RxView.clicks(searchButton)
 
     override fun loadMoreStargazers(): Observable<Boolean> = RxRecyclerView.scrollStateChanges(stargazersRecyclerView)
-            .filter { it == RecyclerView.SCROLL_STATE_IDLE }
+            .filter { it == RecyclerView.SCROLL_STATE_SETTLING }
             .flatMap { Observable.just(linearLayoutManager.findLastVisibleItemPosition() == stargazersRecyclerView.adapter.itemCount - 1) }
 
 }
