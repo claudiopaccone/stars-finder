@@ -1,0 +1,17 @@
+ext.rxAndroidVersion = '2.0.1'
+ext.rxJavaVersion = '2.1.7'
+ext.rxBindingVersion = '2.0.0'
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+
+    /* External dependencies  */
+    compile "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
+    compile "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
+    compile "com.jakewharton.rxbinding2:rxbinding:$rxBindingVersion"
+}
