@@ -14,7 +14,7 @@
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView">
+        app:layout_constraintTop_toTopOf="parent">
 
         <android.support.design.widget.TextInputEditText android:id="@+id/ownerEditText"
             android:layout_width="200dp"
@@ -22,7 +22,6 @@
             android:hint="@string/owner_hint"
             android:inputType="text"
             android:maxLines="1"
-            android:text="kimhou"
             tools:text="Owner" />
     </android.support.design.widget.TextInputLayout>
 
@@ -43,7 +42,6 @@
             android:hint="@string/repository_hint"
             android:inputType="text"
             android:maxLines="1"
-            android:text="Android"
             tools:text="Repository" />
     </android.support.design.widget.TextInputLayout>
 
@@ -98,8 +96,8 @@
         app:layout_constraintTop_toBottomOf="@+id/searchButton" />
 
     <ProgressBar android:id="@+id/nextProgressBar"
-        android:layout_width="12dp"
-        android:layout_height="12dp"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
