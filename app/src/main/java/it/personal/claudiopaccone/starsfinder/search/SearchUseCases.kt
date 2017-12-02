@@ -1,7 +1,6 @@
 package it.personal.claudiopaccone.starsfinder.search
 
 import io.reactivex.Observable
-import io.reactivex.ObservableSource
 import io.reactivex.Scheduler
 import it.personal.claudiopaccone.starsfinder.api.ApiService
 import it.personal.claudiopaccone.starsfinder.api.models.Stargazer
@@ -17,7 +16,7 @@ object SearchUseCases {
     fun startSearch(apiService: ApiService, owner: String, repository: String, jobScheduler: Scheduler): Observable<SearchAction> = apiService
             .getStargazers(owner, repository)
             .flatMap { getResponseInfo(it) }
-            .flatMap<SearchAction> { (next, list) -> chooseNextAction(next, list) }
+            .flatMap<SearchAction> { Observable.just(SearchResult(it.second, it.first)) }
             .startWith(StartSearch)
             .catchException()
             .subscribeOn(jobScheduler)
@@ -25,17 +24,10 @@ object SearchUseCases {
     fun loadNextPage(apiService: ApiService, nextUrl: String, jobScheduler: Scheduler): Observable<SearchAction> = apiService
             .getMoreStargazers(nextUrl)
             .flatMap { getResponseInfo(it) }
-            .flatMap<SearchAction> { (next, list) -> chooseNextAction(next, list) }
+            .flatMap<SearchAction> { Observable.just(SearchResult(it.second, it.first)) }
             .startWith(LoadMore)
             .catchException()
             .subscribeOn(jobScheduler)
-
-    private fun chooseNextAction(next: String?, list: List<Stargazer>): ObservableSource<out SearchAction>? {
-        return if (next == null)
-            Observable.just(SearchResult(list), SearchCompleted)
-        else
-            Observable.just(SearchResult(list, next))
-    }
 
     private fun getResponseInfo(it: Result<List<Stargazer>>): Observable<StargazersResponseInfo>? {
         return if (it.isError) {

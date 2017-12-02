@@ -30,7 +30,6 @@ data class SearchResult(val list: List<Stargazer>, val urlNext: String? = null) 
 object StartSearch : SearchAction()
 object LoadMore : SearchAction()
 data class SearchError(val isNotFound: Boolean) : SearchAction()
-object SearchCompleted : SearchAction()
 
 val searchReducer: Reducer<SearchAction, SearchViewState> = { action, viewState ->
     when (action) {
@@ -39,7 +38,6 @@ val searchReducer: Reducer<SearchAction, SearchViewState> = { action, viewState 
         is SearchResult -> viewState.copy(resultState = SuccessState, list = action.list, next = action.urlNext)
         StartSearch -> viewState.copy(resultState = FirstLoadState, next = null, list = emptyList())
         is SearchError -> viewState.copy(resultState = ErrorState(isNotFound = action.isNotFound))
-        SearchCompleted -> viewState.copy(next = null)
         LoadMore -> viewState.copy(resultState = LoadMoreState)
     }
 }
