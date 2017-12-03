@@ -39,8 +39,7 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/owner_hint"
                         android:inputType="text"
-                        android:maxLines="1"
-                        android:text="kimhou" />
+                        android:maxLines="1"/>
                 </android.support.design.widget.TextInputLayout>
 
 
@@ -58,8 +57,7 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/repository_hint"
                         android:inputType="text"
-                        android:maxLines="1"
-                        android:text="Android" />
+                        android:maxLines="1"/>
                 </android.support.design.widget.TextInputLayout>
 
                 <Button android:id="@+id/searchButton"
